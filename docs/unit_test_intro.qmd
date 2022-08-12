@@ -1,0 +1,56 @@
+---
+title: "Computational Session"
+format: html
+editor: visual
+---
+```{r}
+library(testthat)
+library(here)
+```
+
+# Lecture 9 Functions continued...
+
+Example #1 
+Cteate functions for mean 
+```{r}
+mean_range <- function(df) {
+  col_means <- apply(X = df, MARGIN = 2, FUN = mean, na.rm = TRUE)
+  col_mean_max <- max(col_means)
+  col_mean_min <- min(col_means)
+  print(c(col_mean_max, col_mean_min))
+}
+```
+
+Test function on mtcars data frame 
+```{r}
+mean_range(mtcars)
+```
+
+expect_length test
+```{r}
+expect_length(mean_range(mtcars), 2)
+```
+
+expect_true conditional test
+```{r}
+expect_true(mean_range(mtcars)[1] >= mean_range(mtcars)[2])
+```
+
+expect_type test
+```{r}
+expect_type(mean_range(mtcars), integer(2))
+```
+
+# Source a script
+```{r}
+source(here::here("src", "r_script_practice.R"))
+```
+
+Source a script example #2 
+```{r}
+source(here::here("src", "cork_oak_growth.R"))
+
+tree_ages <- seq(from = 4, to = 50, by = 1)
+height_t2(height_t1 = 12, t1 = 3, t2 = 8)
+```
+
