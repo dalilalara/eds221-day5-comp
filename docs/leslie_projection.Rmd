@@ -43,27 +43,32 @@ Add line-by-line comments wheres prompted in the code below, explaining what eac
 # ------ WHAT HAPPENS HERE? ------ #
 # ------ comment line-by-line ---- #
 
-# The line below...
+# The line below...creates a time sequence from 0 years to 8 years increasing each element to one 
 time_yr <- seq(from = 0, to = 8, by = 1)
 
-# The line below...
+# The line below... creates a matrix to hold our out puts 
 proj_year <- matrix(ncol = length(fish_year0), nrow = length(time_yr))
 
-# The line below...
+# The line below...  calls first row all columns of matrix (proj_year). Sets initial condition of proj_year 
 proj_year[1, ] <- fish_year0
 
-# The for loop below...
+# The for loop below... takes each time_yr into function to output the projected population of fish per year. Taking dot product of initial values (with initial condition assigned)
 for (i in 2:length(time_yr)) {
   proj_year[i,] <- fish_leslie %*% proj_year[i-1,]
 }
 
 
 # The rest is wrangling & visualization (run to check it out):
+
+# renames col names of matrix proj_year
 colnames(proj_year) <- c("eggs", "fry", "juvenile", "adult")
 
+# Creates new data frame of time_yr and proj_year to organize data and include columns for life stage and stage population 
+# pivot_longer(cols = -(everything expect this column), names_to = "", values_to = "") lengthens data 
 proj_df <- data.frame(time_yr, proj_year) %>% 
   pivot_longer(cols = -time_yr, names_to = "lifestage", values_to = "stage_population")
 
+# Creates gggplot of proj_df with time_yr versus stage_population 
 ggplot(data = proj_df, aes(x = time_yr, y = stage_population)) +
   geom_line(aes(color = lifestage)) +
   scale_y_log10()
